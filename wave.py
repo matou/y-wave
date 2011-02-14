@@ -3,3 +3,5 @@ class Wave:
     to communicate with those buddies."
     pass
 
+# the list of all waves
+waves = []
