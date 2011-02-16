@@ -11,22 +11,33 @@
 # WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-# 
+#
+
+from threading import Thread
+import dbus, gobject
+from dbus.mainloop.glib import DBusGMainLoop
+
+wave = ""
+
+def set_wave(w):
+    wave = w
 
 def msg_rcv(account, sender, message, conversation, flags):
-    "will be invoked when a messages is received"
+    print sender, "said:", message
 
+class Listener(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        bus = dbus.SessionBus()
 
-def listen():
-    "start listening to pidgin"
-    import dbus, gobject
-    from dbus.mainloop.glib import DBusGMainLoop
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    bus = dbus.SessionBus()
-    bus.add_signal_receiver(msg_rcv,
-            dbus_interface="im.pidgin.purple.PurpleInterface",
-            signal_name="ReceivedImMsg")
-    loop = gobject.MainLoop()
-    loop.run()
+        bus.add_signal_receiver(
+                msg_rcv, 
+                dbus_interface="im.pidgin.purple.PurpleInterface", 
+                signal_name="ReceivedImMsg")
 
-listen()
+        self.loop = gobject.MainLoop()
+
+    def run(self):
+        self.loop.run()
+
