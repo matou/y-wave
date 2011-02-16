@@ -13,17 +13,32 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # 
 
-import dbus
+import dbus, gobject
+from dbus.mainloop.glib import DBusGMainLoop
 
+DBusGMainLoop(set_as_default=True)
 bus = dbus.SessionBus()
-obj = bus.get_object("im.pidgin.purple.PurpleService",
-"/im/pidgin/purple/PurpleObject")
+loop = gobject.MainLoop()
+
+obj = bus.get_object(
+        "im.pidgin.purple.PurpleService",
+        "/im/pidgin/purple/PurpleObject")
 purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
 
 def get_account_id(name):
     "returns the id of the specified account"
     for id in purple.PurpleAccountsGetAllActive():
         # i know this is ugly. but it's late and i want this to work.
+        # PurpleAccountsFind(name, protocol) didn't work
         if name == str(purple.PurpleAccountGetUsername(id)).split("/")[0]:
             return id
     return -1
+
+def send_msg(self, acc, receiver, message):
+    conv = self.purple.PurpleConversationNew(
+            1,
+            get_account_id(acc),
+            receiver)
+    purple.PurpleConvImSend(purple.PurpleConvIm(conv), message)
+
+

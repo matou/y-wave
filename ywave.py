@@ -15,14 +15,18 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-import dbus, gobject, wave
+import dbus, gobject
+#import wave
 from dbus.mainloop.glib import DBusGMainLoop
+
+def msg_rcv(account, sender, message, conversation, flags):
+    print sender, "said:", message
 
 DBusGMainLoop(set_as_default=True)
 bus = dbus.SessionBus()
 loop = gobject.MainLoop()
 bus.add_signal_receiver(
-        wave.msg_rcv, 
+        msg_rcv, 
         dbus_interface="im.pidgin.purple.PurpleInterface", 
         signal_name="ReceivedImMsg")
 
