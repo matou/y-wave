@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # 
 
-import dbus, gobject
+import dbus, gobject, wave
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
@@ -24,6 +24,22 @@ obj = bus.get_object(
         "im.pidgin.purple.PurpleService",
         "/im/pidgin/purple/PurpleObject")
 purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
+
+bus.add_signal_receiver(
+        wave.msg_rcv,
+        dbus_interface="im.pidgin.purple.PurpleInterface",
+        signal_name="ReceivedImMsg")
+
+class Listener(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+
+    def run():
+        loop = gobject.MainLoop()
+        loop.run()
+
+listener = Listener()
+listener.start()
 
 def get_account_id(name):
     "returns the id of the specified account"
@@ -40,5 +56,4 @@ def send_msg(self, acc, receiver, message):
             get_account_id(acc),
             receiver)
     purple.PurpleConvImSend(purple.PurpleConvIm(conv), message)
-
 
