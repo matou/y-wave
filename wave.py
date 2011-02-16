@@ -30,5 +30,13 @@ class Wave(UserList):
                     participant.name, 
                     message)
 
+wave = Wave()
+
 def msg_rcv(account, sender, message, conversation, flags):
-    print sender, "said:", message
+    # TODO: do something useful here
+    pass
+
+
+def get_wave():
+    "returns the (only) wave"
+    return wave
