@@ -44,7 +44,7 @@ class Listener(Thread):
         logging.debug("listener started")
         loop = gobject.MainLoop()
         loop.run()
-        logging.debug("listener finisched (THIS SHOULD NOT HAPPEN)")
+        logging.debug("listener finished (THIS SHOULD NOT HAPPEN)")
 
 listener = Listener()
 listener.start()
