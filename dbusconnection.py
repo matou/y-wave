@@ -15,6 +15,7 @@
 
 import dbus, gobject, wave
 from dbus.mainloop.glib import DBusGMainLoop
+from threading import Thread
 
 DBusGMainLoop(set_as_default=True)
 bus = dbus.SessionBus()
@@ -34,7 +35,7 @@ class Listener(Thread):
     def __init__(self):
         Thread.__init__(self)
 
-    def run():
+    def run(self):
         loop = gobject.MainLoop()
         loop.run()
 

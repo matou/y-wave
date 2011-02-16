@@ -14,7 +14,7 @@
 # 
 
 from UserList import UserList
-import transmitter
+import dbusconnection
 
 class Wave(UserList):
     "A wave has information about buddies who are part of the wave and "\
@@ -25,12 +25,10 @@ class Wave(UserList):
 
     def wave(self, message):
         for participant in self:
-            transmitter.send_msg(
+            dbusconnection.send_msg(
                     participant.account, 
                     participant.name, 
                     message)
-
-wave = Wave()
 
 def msg_rcv(account, sender, message, conversation, flags):
     print sender, "said:", message
