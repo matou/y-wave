@@ -16,4 +16,4 @@
 import sys
 
 def debug(message):
-    sys.stderr.write(str(message))
+    sys.stderr.write("%s\n" % str(message))

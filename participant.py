@@ -16,5 +16,5 @@
 class Participant:
 
     def __init__(self, name, account):
-        self.name = name
+        self.name = name.split("/")[0]
         self.account = account

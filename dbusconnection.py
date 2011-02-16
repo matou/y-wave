@@ -13,7 +13,8 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # 
 
-import dbus, gobject, wave
+import dbus, gobject, logging
+import wave
 from dbus.mainloop.glib import DBusGMainLoop
 from threading import Thread
 
@@ -26,21 +27,29 @@ obj = bus.get_object(
         "/im/pidgin/purple/PurpleObject")
 purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
 
+logging.debug("adding signal reaceiver (ReceivedImMsg)")
 bus.add_signal_receiver(
         wave.msg_rcv,
         dbus_interface="im.pidgin.purple.PurpleInterface",
         signal_name="ReceivedImMsg")
+logging.debug("signal receiver added")
 
 class Listener(Thread):
+
     def __init__(self):
         Thread.__init__(self)
+        logging.debug("initialized Listener")
 
     def run(self):
+        logging.debug("listener started")
         loop = gobject.MainLoop()
         loop.run()
+        logging.debug("listener finisched (THIS SHOULD NOT HAPPEN)")
 
 listener = Listener()
 listener.start()
+logging.debug("continuing after listener start")
+
 
 def get_account_id(name):
     "returns the id of the specified account"
