@@ -30,3 +30,7 @@ class Wave(UserList):
                     participant.name, 
                     message)
 
+wave = Wave()
+
+def msg_rcv(account, sender, message, conversation, flags):
+    print sender, "said:", message

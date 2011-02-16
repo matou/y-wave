@@ -15,36 +15,17 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-from threading import Thread
-import dbus, gobject
+import dbus, gobject, wave
 from dbus.mainloop.glib import DBusGMainLoop
 
-def msg_rcv(account, sender, message, conversation, flags):
-    print sender, "said:", message
+DBusGMainLoop(set_as_default=True)
+bus = dbus.SessionBus()
+loop = gobject.MainLoop()
+bus.add_signal_receiver(
+        wave.msg_rcv, 
+        dbus_interface="im.pidgin.purple.PurpleInterface", 
+        signal_name="ReceivedImMsg")
 
-class Listener(Thread):
-    def __init__(self):
-        Thread.__init__(self)
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-        bus = dbus.SessionBus()
-
-        bus.add_signal_receiver(
-                msg_rcv, 
-                dbus_interface="im.pidgin.purple.PurpleInterface", 
-                signal_name="ReceivedImMsg")
-
-        self.loop = gobject.MainLoop()
-
-    def run(self):
-        self.loop.run()
-
-l = Listener()
-
-# this is the main program
-
-# first, we need a wave
-import wave
-wave = wave.Wave()
 
 # finally start listening
-l.start()
+loop.run()
