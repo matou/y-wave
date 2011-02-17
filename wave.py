@@ -42,7 +42,7 @@ class Wave(UserList):
         return False
 
 def init(message_handler):
-    w = Wave()
+    wave.w = Wave()
     logging.debug("wave created")
     msg_handler = message_handler
     logging.debug("handler: %s" % str(msg_handler))
@@ -50,12 +50,12 @@ def init(message_handler):
 def msg_rcv(account, sender, message, conversation, flags):
     logging.debug("received message: %s" % message)
     sender = sender.split("/")[0]
-    if w.is_participant(sender):
+    if wave.w.is_participant(sender):
         msg_handler("%s: %s" % (sender, message))
 
 def wave(message):
-    w.wave(message)
+    wave.w.wave(message)
 
 def add_participant(participant):
-    w.add_participant(participant)
+    wave.w.add_participant(participant)
 
