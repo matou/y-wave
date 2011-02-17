@@ -9,7 +9,7 @@ partner type in real time) and to add buddies from your contacts to the wave.
 Since my friends and I really need some advanced communications technology like
 wave (and I can't sleep right now) I will start to implement my ugly hack.
 
-By the way: This will be a d-bus script communicating with pidgin.
+By the way: This will be a script communicating with pidgin over d-bus.
 
 
 [0] <http://www.waveprotocol.org/>
