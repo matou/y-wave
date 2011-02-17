@@ -48,6 +48,7 @@ def init(message_handler):
     logging.debug("handler: %s" % str(msg_handler))
 
 def msg_rcv(account, sender, message, conversation, flags):
+    logging.debug("received message: %s" % message)
     sender = sender.split("/")[0]
     if w.is_participant(sender):
         msg_handler("%s: %s" % (sender, message))
