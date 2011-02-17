@@ -13,29 +13,30 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 # 
 
-import dbus, gobject, logging
+import logging
+from threading import Thread
+import dbus, gobject
 import wave
 from dbus.mainloop.glib import DBusGMainLoop
-from threading import Thread
 
-DBusGMainLoop(set_as_default=True)
-bus = dbus.SessionBus()
-loop = gobject.MainLoop()
+def init():
+    DBusGMainLoop(set_as_default=True)
+    bus = dbus.SessionBus()
+    loop = gobject.MainLoop()
 
-obj = bus.get_object(
-        "im.pidgin.purple.PurpleService",
-        "/im/pidgin/purple/PurpleObject")
-purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
+    obj = bus.get_object(
+            "im.pidgin.purple.PurpleService",
+            "/im/pidgin/purple/PurpleObject")
+    purple = dbus.Interface(obj, "im.pidgin.purple.PurpleInterface")
 
-logging.debug("adding signal reaceiver (ReceivedImMsg)")
-bus.add_signal_receiver(
-        wave.msg_rcv,
-        dbus_interface="im.pidgin.purple.PurpleInterface",
-        signal_name="ReceivedImMsg")
-logging.debug("signal receiver added")
+    logging.debug("adding signal reaceiver (ReceivedImMsg)")
+    bus.add_signal_receiver(
+            wave.msg_rcv,
+            dbus_interface="im.pidgin.purple.PurpleInterface",
+            signal_name="ReceivedImMsg")
+    logging.debug("signal receiver added")
 
 class Listener(Thread):
-
     def __init__(self):
         Thread.__init__(self)
         logging.debug("initialized Listener")
@@ -46,9 +47,10 @@ class Listener(Thread):
         loop.run()
         logging.debug("listener finished (THIS SHOULD NOT HAPPEN)")
 
-listener = Listener()
-listener.start()
-logging.debug("continuing after listener start")
+def start_listening():
+    listener = Listener()
+    listener.start()
+    logging.debug("continuing after listener start")
 
 
 def get_account_id(name):

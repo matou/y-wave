@@ -44,6 +44,10 @@ def cmd(cmd):
 import wave
 wave.init(display)
 
+import dbusconnection
+dbusconnection.init()
+dbusconnection.start_listening()
+
 logging.debug("starting main loop")
 while(True):
     logging.debug("main loop started")
